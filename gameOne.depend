@@ -1,0 +1,16 @@
+# depslib dependency file v1.0
+1544788694 source:e:\c++\gameone\main.cpp
+	<iostream>
+	<vector>
+	<algorithm>
+	<ctime>
+	<iomanip>
+	<stdlib.h>
+	<windows.h>
+	<string>
+	<sstream>
+	<conio.h>
+	<stdlib.h>
+	<windows.h>
+	<math.h>
+
