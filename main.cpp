@@ -18,16 +18,10 @@ int CARDSBOARD_LEFT_EDGE = MESSAGE_LEFT_EDGE + MESSAGE_WIDTH - 1 +
 int CARDSBOARD_TOP_EDGE;
 int SPACE_BETWEEN_CARDS_X = 2, SPACE_BETWEEN_CARDS_Y = 1;
 
-int cardsFrameX0;
-int cardsFrameY0;
-int yPerFrame;
-int xPerFrame;
-int cardsFrameX1;
-int cardsFrameY1;
-int deltaX0;
-int deltaX1;
-int deltaY0;
-int deltaY1;
+int cardsFrameX0, cardsFrameY0;
+int yPerFrame, xPerFrame;
+int cardsFrameX1, cardsFrameY1;
+int deltaX0, deltaX1, deltaY0, deltaY1;
 
 WORD DEFAULT_COLOR = FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE ;
 WORD BRIGHT_GREEN_COLOR = FOREGROUND_GREEN | FOREGROUND_INTENSITY;
@@ -52,7 +46,7 @@ WORD REDLETTER_COLOR = FOREGROUND_RED | BACKGROUND_INTENSITY |
 // blue FG
 WORD BLUELETTER_COLOR = FOREGROUND_BLUE;
 
-string FRAME_MARK_ARR[9] = {"ùÝ", "ùÞ", "ùß", "ùà", "ùá", "ùâ", "ùã", "ùä", "ùå"};
+string FRAME_MARK_ARR[9] = {"Ã¹Ã", "Ã¹Ãž", "Ã¹ÃŸ", "Ã¹Ã ", "Ã¹Ã¡", "Ã¹Ã¢", "Ã¹Ã£", "Ã¹Ã¤", "Ã¹Ã¥"};
 string basic_color[] = {"Spade", "Heart", "Club", "Diamond"};
 
 struct INFORMATION_CARDS
@@ -106,8 +100,8 @@ string GetMove()
             case 77:
                 return "right";
         }
-	}
-	return "null";
+    }
+    return "null";
 }
 
 void ShowACard(int x0, int y0, bool isFront, string color = "", int num = 0)
@@ -147,17 +141,16 @@ void ShowACard(int x0, int y0, bool isFront, string color = "", int num = 0)
         {
             gotoxy(x, y + i);
             for (int j = 0; j < MARK_NUMBERS; j++)
-                cout << "¡»";
+                cout << "Â¡Â»";
         }
-	}
+    }
 }
 
 void EmptyACard(int x0 , int y0)
 {
     int x = x0 + CARDSBOARD_LEFT_EDGE + 1;
     int y = y0 + CARDSBOARD_TOP_EDGE;
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),
-                                DEFAULT_COLOR);
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), DEFAULT_COLOR);
     for (int i = 0; i < CARD_HEIGHT; i++)
     {
         gotoxy(x, y + i);
@@ -169,36 +162,34 @@ void EmptyACard(int x0 , int y0)
 void ShowAFrame(int x0, int y0, int width, int height, bool ifSelected = false)
 {
     if (ifSelected)
-        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),
-                            BRIGHT_GREEN_COLOR);
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), BRIGHT_GREEN_COLOR);
     else
-        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),
-                            DEFAULT_COLOR);
-    string frameCorner[4]= {"ùÝ", "ùß", "ùã", "ùå"};
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), DEFAULT_COLOR);
+    string frameCorner[4]= {"Ã¹Ã", "Ã¹ÃŸ", "Ã¹Ã£", "Ã¹Ã¥"};
 
     //left
     for ( int i = y0 + 1 ; i < y0 + height ; i++ )
     {
         gotoxy( x0, i );
-        cout << "ùø";
+        cout << "Ã¹Ã¸";
     }
     //right
     for ( int i = y0 + 1 ; i < y0 + height - 1 ; i++ )
     {
         gotoxy( x0 + width - 1, i );
-        cout << "ùø";
+        cout << "Ã¹Ã¸";
     }
     // up
     gotoxy( x0, y0 );
     cout << frameCorner[0];
     for ( int i = x0 ; i < x0 + width - 2 ; i++)
-        cout << "ùù";
+        cout << "Ã¹Ã¹";
     cout << frameCorner[1];
     //down
     gotoxy( x0, y0 + height - 1 );
     cout << frameCorner[2];
     for ( int i = x0 ; i < x0 + width - 2  ; i++)
-        cout << "ùù";
+        cout << "Ã¹Ã¹";
     cout << frameCorner[3];
 }
 
@@ -212,15 +203,18 @@ void ShowLevelRules(int x0, int y0)
 
 void ShowGameRules(int x0, int y0)
 {
-    string gameRules[] = {
+    string gameRules[] = 
+    {
         "           Memory Game         ",
         "Use arrow keys and Enter key to",
         "select cards.",
         "Eliminate cards by turning over",
         "any two matching cards.",
         "Win the game by eliminating all",
-        "of cards!"};
-    for(int i = 0; i < 7; i++){
+        "of cards!"
+    };
+    for(int i = 0; i < 7; i++)
+    {
         gotoxy(x0, y0 + i * 2);
         cout << gameRules[i] ;
     }
@@ -253,10 +247,10 @@ int ChooseLevel()
 	gotoxy(levelNamePosX, 16);
 	cout << "    large    ";
     gotoxy(43, 10);
-	while (true)
+    while (true)
 	{
 		string dir = GetMove();
-        if (dir == "enter")
+		if (dir == "enter")
             break;
         SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), UNSELECTED_COLOR);
 		if (dir == "down" && selectedLevel == 0)
@@ -398,6 +392,7 @@ COORD ChooseACard(COORD pos0)
                 true);
 	}
 }
+
 vector<int> ShuffleCards(int width, int height)
 {
     int shuffleTimes = 100;
@@ -493,7 +488,7 @@ void PlayGame()
                 true, stackCards[pos.X][pos.Y].color, stackCards[pos.X][pos.Y].num);
             if (tempCard1.X == -1)
                 tempCard1 = pos;
-            else if (tempCard1.X != -1)
+            else
             {
                 tempCard2 = pos;
                 Sleep(1500);
@@ -517,7 +512,7 @@ void PlayGame()
                     EmptyACard(stackCards[tempCard2.X][tempCard2.Y].xCard,
                         stackCards[tempCard2.X][tempCard2.Y].yCard);
                     gotoxy(MESSAGE_LEFT_EDGE + 1 , MESSAGE_TOP_EDGE + 4);
-                    if(pairNumbers == CARDS_WIDTH * CARDS_HEIGHT / 2)
+                    if (pairNumbers == CARDS_WIDTH * CARDS_HEIGHT / 2)
                     {
                         gotoxy(MESSAGE_LEFT_EDGE + 1 , MESSAGE_TOP_EDGE + 1 + k_line);
                         SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),
@@ -545,8 +540,7 @@ void EndGame()
     Clean();
     gotoxy(37, (CARDSBOARD_TOP_EDGE + cardsFrameY1 + yPerFrame) / 2);
     cout << "VICTORY";
-    gotoxy(37 + 25,
-           (CARDSBOARD_TOP_EDGE + cardsFrameY1 + yPerFrame) / 2 + 1);
+    gotoxy(37 + 25, (CARDSBOARD_TOP_EDGE + cardsFrameY1 + yPerFrame) / 2 + 1);
     cout << "Author: JackyTsai\n";
     system("Pause");
 }
